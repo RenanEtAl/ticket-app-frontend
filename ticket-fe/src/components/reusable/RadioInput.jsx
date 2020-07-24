@@ -15,7 +15,7 @@ const RadioInput = (props) => {
         onChange={onChange}
       />
       <label
-        classname={labelClassName}
+        className={labelClassName}
         htmlFor={id}
         style={{ color: error ? "red" : "#36404a", fontWeight: "normal" }}
       >

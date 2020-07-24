@@ -1,17 +1,48 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 import "./Auth.css";
 import { FormInput } from "../reusable/FormInput";
+import { RadioInput } from "../reusable/RadioInput";
+import { Button } from "../reusable/Button";
+import { validateInputs } from "../../helpers/Helpers";
 
 const Register = (props) => {
+  const [user, setUser] = useState({
+    data: { username: "", password: "", role: "" },
+  });
 
-    const onChange = () => {
+  const [error, setError] = useState({
+    usernameError: "",
+    passwordError: "",
+    roleError: "",
+  });
 
+  const { username, password } = user.data;
+  const { usernameError, passwordError, roleError } = error;
+
+  const onChange = (event) => {
+    const { name, value } = event.target;
+    const { data } = user;
+    setUser({
+      data: { ...data, [name]: value }, // match the name with the value
+    });
+  };
+  const onRegisterUser = (event) => {
+    event.preventDefault();
+    console.log(user);
+    // validate
+    const isValid = validateInputs(user.data, setError);
+
+    if (isValid) {
+      // create user
+      console.log(user.data);
     }
+  };
   return (
     <div className="auth-wrapper">
       <div className="auth-inner">
-        <form>
+        <form onSubmit={onRegisterUser}>
           <h3>Sign Up</h3>
           <div className="form-group">
             <FormInput
@@ -37,7 +68,42 @@ const Register = (props) => {
               onChange={onChange}
             />
           </div>
+          <div className="form-group">
+            <label>Role</label>
+            <br />
+            <div className="form-check form-check-inline">
+              <RadioInput
+                labelClassName="form-check-label"
+                className="form-check-input"
+                id="inlineRadio1"
+                name="role"
+                value="User"
+                error={roleError}
+                onChange={onChange}
+              />
+            </div>
+            <div className="form-check form-check-inline">
+              <RadioInput
+                labelClassName="form-check-label"
+                className="form-check-input"
+                id="inlineRadio2"
+                name="role"
+                value="Admin"
+                error={roleError}
+                onChange={onChange}
+              />
+            </div>
+          </div>
+          <Button
+            className="btn btn-primary btn-block"
+            type="submit"
+            label="Sign Up"
+          />
+          <p className="forgot-password text-right">
+            Already have an account? <Link to={"/sign-in"}>Login</Link>
+          </p>
         </form>
+       
       </div>
     </div>
   );
