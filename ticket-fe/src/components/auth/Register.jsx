@@ -11,7 +11,7 @@ import { validateInputs } from "../../helpers/Helpers";
 import { createUser } from "../../redux/actions/auth";
 
 const Register = (props) => {
-  const { createUser, isAuthenticated, history } = props;
+  const { createUser, isAuthenticated, history , errors} = props;
 
   const [user, setUser] = useState({
     data: {
@@ -121,6 +121,7 @@ const Register = (props) => {
             Already have an account? <Link to={"/sign-in"}>Login</Link>
           </p>
         </form>
+        {errors ? <p className="error-feedback">{errors}</p> : ""}
       </div>
     </div>
   );
@@ -129,9 +130,11 @@ const Register = (props) => {
 Register.propTypes = {
   createUser: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
+  errors: PropTypes.string
 };
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
+  errors: state.errors
 });
 export default connect(mapStateToProps, { createUser })(Register);

@@ -9,7 +9,7 @@ import { loginUser } from "../../redux/actions/auth";
 import { connect } from "react-redux";
 
 const Login = (props) => {
-  const { loginUser, isAuthenticated, history } = props;
+  const { loginUser, isAuthenticated, history, errors } = props;
 
   const [user, setUser] = useState({
     data: {
@@ -88,6 +88,7 @@ const Login = (props) => {
             Not yet registered? <Link to={"/sign-up"}>Register</Link>
           </p>
         </form>
+        {errors ? <p className="error-feedback">{errors}</p> : ""}
       </div>
     </div>
   );
@@ -96,10 +97,12 @@ const Login = (props) => {
 Login.propTypes = {
   loginUser: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
+  errors: PropTypes.string,
 };
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
+  errors: state.errors,
 });
 
 export default connect(mapStateToProps, { loginUser })(Login);
