@@ -1,15 +1,24 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 import "./Auth.css";
 import { FormInput } from "../reusable/FormInput";
 import { RadioInput } from "../reusable/RadioInput";
 import { Button } from "../reusable/Button";
 import { validateInputs } from "../../helpers/Helpers";
 
+import { createUser } from "../../redux/actions/auth";
+
 const Register = (props) => {
+  const { createUser, isAuthenticated, history } = props;
+
   const [user, setUser] = useState({
-    data: { username: "", password: "", role: "" },
+    data: {
+      username: "",
+      password: "",
+      role: "",
+    },
   });
 
   const [error, setError] = useState({
@@ -17,6 +26,13 @@ const Register = (props) => {
     passwordError: "",
     roleError: "",
   });
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      // take user to dashboard page
+      history.push("/dashboard");
+    }
+  }, [isAuthenticated, history]);
 
   const { username, password } = user.data;
   const { usernameError, passwordError, roleError } = error;
@@ -28,17 +44,19 @@ const Register = (props) => {
       data: { ...data, [name]: value }, // match the name with the value
     });
   };
+
   const onRegisterUser = (event) => {
     event.preventDefault();
     console.log(user);
     // validate
     const isValid = validateInputs(user.data, setError);
-
     if (isValid) {
       // create user
-      console.log(user.data);
+      // console.log(user.data);
+      createUser(user.data);
     }
   };
+
   return (
     <div className="auth-wrapper">
       <div className="auth-inner">
@@ -103,12 +121,17 @@ const Register = (props) => {
             Already have an account? <Link to={"/sign-in"}>Login</Link>
           </p>
         </form>
-       
       </div>
     </div>
   );
 };
 
-Register.propTypes = {};
+Register.propTypes = {
+  createUser: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool,
+};
 
-export default Register;
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
+});
+export default connect(mapStateToProps, { createUser })(Register);

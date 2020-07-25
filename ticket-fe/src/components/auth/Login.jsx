@@ -5,7 +5,12 @@ import { FormInput } from "../reusable/FormInput";
 import { Button } from "../reusable/Button";
 import { validateInputs } from "../../helpers/Helpers";
 
+import { loginUser } from "../../redux/actions/auth";
+import { connect } from "react-redux";
+
 const Login = (props) => {
+  const { loginUser, isAuthenticated, history } = props;
+
   const [user, setUser] = useState({
     data: {
       username: "",
@@ -16,6 +21,12 @@ const Login = (props) => {
     usernameError: "",
     passwordError: "",
   });
+  useEffect(() => {
+    if (isAuthenticated) {
+      // take user to dashboard page
+      history.push("/dashboard");
+    }
+  }, [isAuthenticated, history]);
 
   const { username, password } = user.data;
   const { usernameError, passwordError } = error;
@@ -35,6 +46,7 @@ const Login = (props) => {
     // login
     if (isValid) {
       console.log(user.data);
+      loginUser(user.data);
     }
   };
   return (
@@ -81,6 +93,13 @@ const Login = (props) => {
   );
 };
 
-Login.propTypes = {};
+Login.propTypes = {
+  loginUser: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool,
+};
 
-export default Login;
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
+});
+
+export default connect(mapStateToProps, { loginUser })(Login);

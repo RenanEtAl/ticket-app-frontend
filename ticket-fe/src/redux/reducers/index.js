@@ -1,10 +1,15 @@
 import { combineReducers } from "redux";
+import authReducer from "./authReducer";
 
 const appReducers = combineReducers({
-    auth: '',
-    errors: '',
+  auth: authReducer,
+  user: "",
+  ticket: "",
+  errors: "",
+});
 
-})
+const rootReducers = (state, action) => {
+  return appReducers(state, action);
+};
 
-
-export default rootReducers
+export default rootReducers;
