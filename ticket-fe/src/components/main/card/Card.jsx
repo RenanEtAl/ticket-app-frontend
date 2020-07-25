@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import _ from "lodash";
 import { connect } from "react-redux";
-import "./Card.css";
+import "./Card.css"
 import { Box } from "./Box";
 import { Button } from "../../reusable/Button";
 
