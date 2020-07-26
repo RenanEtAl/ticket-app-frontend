@@ -2,9 +2,10 @@ import React from "react";
 import PropTypes from "prop-types";
 import _ from "lodash";
 import { connect } from "react-redux";
-import "./Card.css"
+import "./Card.css";
 import { Box } from "./Box";
 import { Button } from "../../reusable/Button";
+import { Modal } from "../../reusable/modal/Modal";
 
 const Card = (props) => {
   const { tickets } = props;
@@ -17,6 +18,12 @@ const Card = (props) => {
         className="btn btn-primary btn-add"
         type="submit"
         label="Add Ticket"
+      />
+      <Modal 
+        header='Add New Ticket'
+        visible={visible}
+        dismiss={}
+        children='this is a test'
       />
       <div className="text-center mb-2">
         <div className="row">
