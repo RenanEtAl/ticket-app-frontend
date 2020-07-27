@@ -1,11 +1,13 @@
 import { signUpUser, signInUser } from "../../services/auth.service";
 import { AUTHENTICATE_USER, SET_ERROR, LOGOUT } from "../types";
+import { AuthToken } from "../../helpers/AuthToken";
 
 export const createUser = (userData) => async (dispatch) => {
   try {
     const user = await signUpUser(userData);
     console.log(user);
     const { token } = user.data;
+    AuthToken(token);
     dispatch({
       type: AUTHENTICATE_USER,
       payload: token,
@@ -26,6 +28,7 @@ export const loginUser = (userData) => async (dispatch) => {
     const user = await signInUser(userData);
     console.log(user);
     const { token } = user.data;
+    AuthToken(token);
     dispatch({
       type: AUTHENTICATE_USER,
       payload: token,
@@ -48,7 +51,6 @@ export const logoutUser = () => async (dispatch) => {
       payload: null,
     });
   } catch (error) {
-    console.log('Unable to signout', error)
+    console.log("Unable to signout", error);
   }
 };
-

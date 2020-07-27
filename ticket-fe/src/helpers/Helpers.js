@@ -36,3 +36,53 @@ export const validateInputs = (userData, setError) => {
   setError(errorMsg);
   return formValid;
 };
+
+// department dropdown options
+export const departmentsArray = () => {
+  const result = [
+    {
+      id: 0,
+      title: "IT",
+      key: "departments",
+    },
+    {
+      id: 1,
+      title: "Finance",
+      key: "departments",
+    },
+    {
+      id: 2,
+      title: "Human Resources",
+      key: "departments",
+    },
+    {
+      id: 3,
+      title: "Sales/Marketing",
+      key: "departments",
+    },
+  ];
+
+  return result;
+};
+// priority dropdown options
+export const prioritiesArray = () => {
+  const result = [
+    {
+      id: 0,
+      title: "Low",
+      key: "priorities",
+    },
+    {
+      id: 1,
+      title: "Medium",
+      key: "priorities",
+    },
+    {
+      id: 2,
+      title: "High",
+      key: "priorities",
+    },
+  ];
+
+  return result;
+};

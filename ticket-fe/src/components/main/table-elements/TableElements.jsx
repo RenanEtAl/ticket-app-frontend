@@ -2,7 +2,7 @@ import React from "react";
 import Entries from "./elements/Entries";
 import Table from "./table/Table";
 
-const TableElement = () => {
+const TableElements = () => {
   return (
     <div>
       <div className="row">
@@ -29,4 +29,4 @@ const labelTwoStyle = {
   marginTop: "1px",
 };
 
-export { TableElement };
+export { TableElements };

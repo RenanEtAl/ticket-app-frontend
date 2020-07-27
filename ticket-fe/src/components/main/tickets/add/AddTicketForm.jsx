@@ -1,11 +1,75 @@
-import React from "react";
+import React, { useState } from "react";
 import { FormInput } from "../../../reusable/FormInput";
 import { Button } from "../../../reusable/Button";
+import { DropDown } from "../../../reusable/dropdown/DropDown";
+import { departmentsArray, prioritiesArray } from "../../../../helpers/Helpers";
+import { addNewTicket } from "../../../../services/ticket.service";
 
 // children for the Modal
 const AddTicketForm = () => {
-  const onAddTickets = (event) => {};
-  const onChange = (event) => {};
+  let departments = departmentsArray();
+  let priorities = prioritiesArray();
+  const [department, setDepartment] = useState("Select Department");
+  const [priority, setPriority] = useState("Select Priority");
+  const [ticket, setTicket] = useState({
+    data: {
+      fullname: "",
+      email: "",
+      subject: "",
+      description: "",
+      department: "",
+      priority: "",
+    },
+  });
+
+  const { fullname, email, subject, description } = ticket.data;
+
+  const onAddTickets = async (event) => {
+    event.preventDefault();
+    const { data } = ticket;
+    data.priority = priority;
+    data.department = department;
+
+    // add ticket
+    await addNewTicket(data);
+    clearFormFields();
+  };
+
+  const onChange = (event) => {
+    const { name, value } = event.target;
+    const { data } = ticket;
+    // tickets
+    setTicket({
+      data: {
+        ...data,
+        [name]: value,
+      },
+    });
+  };
+
+  const getDropDownValue = (item) => {
+    if (item.key === "departments") {
+      setDepartment(item.title);
+    } else {
+      setPriority(item.title);
+    }
+  };
+
+  const clearFormFields = () => {
+    setTicket({
+      data: {
+        fullname: "",
+        email: "",
+        subject: "",
+        description: "",
+        department: "",
+        priority: "",
+      },
+    });
+    setDepartment("Select Department");
+    setPriority("Select Priority");
+  };
+
   return (
     <>
       <form onSubmit={onAddTickets}>
@@ -33,6 +97,24 @@ const AddTicketForm = () => {
             value={email}
             error=""
             onChange={onChange}
+          />
+        </div>
+        {/* Department */}
+        <div className="form-group">
+          <DropDown
+            title={department}
+            label="Departments"
+            list={departments}
+            getDropDownValue={getDropDownValue}
+          />
+        </div>
+        {/* Priority */}
+        <div className="form-group">
+          <DropDown
+            title={priority}
+            label="Priority"
+            list={priorities}
+            getDropDownValue={getDropDownValue}
           />
         </div>
         {/* subject */}
@@ -72,6 +154,7 @@ const AddTicketForm = () => {
             !priority
           }
         />
+        &nbsp;&nbsp;&nbsp;
         <Button
           className="btn btn-danger"
           label="CANCEL"
