@@ -6,15 +6,28 @@ import AddTicket from "../tickets/add/AddTicket";
 import { TableElements } from "../table-elements/TableElements";
 import { AuthToken } from "../../../helpers/AuthToken";
 import { allTickets, updateTableEntries } from "../../../redux/actions/tickets";
+import io from "socket.io-client";
+
+const API_ENDPOINT = "http://localhost:5000";
 
 const Dashboard = (props) => {
+  const socket = io(API_ENDPOINT);
   const { token, allTickets, updateTableEntries } = props;
 
   useEffect(() => {
-    AuthToken(token);
-    allTickets();
-    updateTableEntries(5);
-  }, [token, allTickets, updateTableEntries]);
+    const dashboardMethods = () => {
+      AuthToken(token);
+      allTickets();
+      updateTableEntries(5);
+    };
+
+    dashboardMethods();
+    // listen for refreshPage event
+    socket.on("refreshPage", () => {
+      dashboardMethods();
+    });
+  }, [token, allTickets, updateTableEntries, socket]);
+
   return (
     <>
       <div className="row">

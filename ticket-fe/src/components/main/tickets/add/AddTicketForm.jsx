@@ -5,8 +5,14 @@ import { DropDown } from "../../../reusable/dropdown/DropDown";
 import { departmentsArray, prioritiesArray } from "../../../../helpers/Helpers";
 import { addNewTicket } from "../../../../services/ticket.service";
 import { addModal } from "../../../../redux/actions/modal";
+import io from "socket.io-client";
 // children for the Modal
+
+const API_ENDPOINT = "http://localhost:5000";
+
 const AddTicketForm = (props) => {
+  const socket = io(API_ENDPOINT);
+
   const { addModal } = props;
   let departments = departmentsArray();
   let priorities = prioritiesArray();
@@ -33,6 +39,7 @@ const AddTicketForm = (props) => {
 
     // add ticket
     await addNewTicket(data);
+    socket.emit("refresh", {});
     clearFormFields();
   };
 
