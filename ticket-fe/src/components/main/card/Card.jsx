@@ -11,8 +11,13 @@ import { addModal } from "../../../redux/actions/modal";
 const Card = (props) => {
   const { tickets, addModal } = props;
 
-  const findByPriority = (value) => {};
-  const findByStatus = (value) => {};
+  const findByPriority = (value) => {
+    return _.filter(tickets, ["priority", value]).length;
+  };
+  
+  const findByStatus = (value) => {
+    return _.filter(tickets, ["status", value]).length;
+  };
   return (
     <div>
       <Button
@@ -24,7 +29,6 @@ const Card = (props) => {
       <Modal
         header="Add New Ticket"
         visible={visible}
-        
         children="this is a test"
       />
       <div className="text-center mb-2">
@@ -87,6 +91,8 @@ Card.propTypes = {
   addModal: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state) => ({});
+const mapStateToProps = (state) => ({
+  tickets: state.tickets.tickets,
+});
 
 export default connect(mapStateToProps, { addModal })(Card);

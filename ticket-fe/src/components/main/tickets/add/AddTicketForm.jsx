@@ -6,7 +6,8 @@ import { departmentsArray, prioritiesArray } from "../../../../helpers/Helpers";
 import { addNewTicket } from "../../../../services/ticket.service";
 import { addModal } from "../../../../redux/actions/modal";
 // children for the Modal
-const AddTicketForm = () => {
+const AddTicketForm = (props) => {
+  const { addModal } = props;
   let departments = departmentsArray();
   let priorities = prioritiesArray();
   const [department, setDepartment] = useState("Select Department");

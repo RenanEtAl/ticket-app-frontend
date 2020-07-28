@@ -3,6 +3,7 @@ import authReducer from "./authReducer";
 import errorReducer from "./errorReducer";
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+import ticketReducer from "./ticketReducer";
 
 const persistConfig = {
   key: "root",
@@ -11,7 +12,7 @@ const persistConfig = {
 const appReducers = combineReducers({
   auth: authReducer,
   user: "",
-  ticket: "",
+  ticket: ticketReducer,
   errors: errorReducer,
 });
 

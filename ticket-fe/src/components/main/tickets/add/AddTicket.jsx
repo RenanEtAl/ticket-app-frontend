@@ -13,6 +13,7 @@ const AddTicket = (props) => {
   }, [setVisible, add]);
 
   const dismiss = () => {
+    // hide
     addModal(false);
   };
   return (
