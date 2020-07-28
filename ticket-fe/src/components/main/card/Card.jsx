@@ -6,9 +6,10 @@ import "./Card.css";
 import { Box } from "./Box";
 import { Button } from "../../reusable/Button";
 import { Modal } from "../../reusable/modal/Modal";
+import { addModal } from "../../../redux/actions/modal";
 
 const Card = (props) => {
-  const { tickets } = props;
+  const { tickets, addModal } = props;
 
   const findByPriority = (value) => {};
   const findByStatus = (value) => {};
@@ -18,12 +19,13 @@ const Card = (props) => {
         className="btn btn-primary btn-add"
         type="submit"
         label="Add Ticket"
+        handleClick={() => addModal(true)}
       />
-      <Modal 
-        header='Add New Ticket'
+      <Modal
+        header="Add New Ticket"
         visible={visible}
-        dismiss={}
-        children='this is a test'
+        
+        children="this is a test"
       />
       <div className="text-center mb-2">
         <div className="row">
@@ -82,6 +84,9 @@ const Card = (props) => {
 
 Card.propTypes = {
   tickets: PropTypes.array.isRequired,
+  addModal: PropTypes.func.isRequired,
 };
+
 const mapStateToProps = (state) => ({});
-export default connect(mapStateToProps, {})(Card);
+
+export default connect(mapStateToProps, { addModal })(Card);

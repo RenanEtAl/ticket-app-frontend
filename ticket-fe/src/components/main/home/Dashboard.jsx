@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import Card from "../card/Card";
 import AddTicket from "../tickets/add/AddTicket";
 import { TableElements } from "../table-elements/TableElements";
+import { AuthToken } from "../../../helpers/AuthToken";
 
 const Dashboard = (props) => {
   const { token } = props;

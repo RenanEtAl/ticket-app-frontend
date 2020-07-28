@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const Entries = (props) => {
-  const { entries, updateTableEntries, tickets } = props;
+  const { entries, updateTableEntries, tickets, tableEntries } = props;
 
   const onSelectTag = (event) => {
     

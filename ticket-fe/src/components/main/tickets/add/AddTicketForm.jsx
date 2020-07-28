@@ -4,7 +4,7 @@ import { Button } from "../../../reusable/Button";
 import { DropDown } from "../../../reusable/dropdown/DropDown";
 import { departmentsArray, prioritiesArray } from "../../../../helpers/Helpers";
 import { addNewTicket } from "../../../../services/ticket.service";
-
+import { addModal } from "../../../../redux/actions/modal";
 // children for the Modal
 const AddTicketForm = () => {
   let departments = departmentsArray();
