@@ -6,19 +6,22 @@ import AddTicket from "../tickets/add/AddTicket";
 import { TableElements } from "../table-elements/TableElements";
 import { AuthToken } from "../../../helpers/AuthToken";
 import { allTickets, updateTableEntries } from "../../../redux/actions/tickets";
+import { getUser } from "../../../redux/actions/user";
 import io from "socket.io-client";
+import EditTicket from "../tickets/edit/EditTicket";
 
 const API_ENDPOINT = "http://localhost:5000";
 
 const Dashboard = (props) => {
   const socket = io(API_ENDPOINT);
-  const { token, allTickets, updateTableEntries } = props;
+  const { token, allTickets, updateTableEntries, entries, getUser } = props;
 
   useEffect(() => {
     const dashboardMethods = () => {
       AuthToken(token);
       allTickets();
-      updateTableEntries(5);
+      updateTableEntries(entries); // 5 entries
+      getUser();
     };
 
     dashboardMethods();
@@ -26,7 +29,7 @@ const Dashboard = (props) => {
     socket.on("refreshPage", () => {
       dashboardMethods();
     });
-  }, [token, allTickets, updateTableEntries, socket]);
+  }, [token, allTickets, updateTableEntries, socket, entries, getUser]);
 
   return (
     <>
@@ -36,6 +39,7 @@ const Dashboard = (props) => {
             <Card />
             <TableElements />
             <AddTicket />
+            <EditTicket />
           </div>
         </div>
       </div>
@@ -47,12 +51,15 @@ Dashboard.propTypes = {
   token: PropTypes.string,
   allTickets: PropTypes.func.isRequired,
   updateTableEntries: PropTypes.func.isRequired,
+  getUser: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   token: state.auth.token,
 });
 
-export default connect(mapStateToProps, { allTickets, updateTableEntries })(
-  Dashboard
-);
+export default connect(mapStateToProps, {
+  allTickets,
+  updateTableEntries,
+  getUser,
+})(Dashboard);

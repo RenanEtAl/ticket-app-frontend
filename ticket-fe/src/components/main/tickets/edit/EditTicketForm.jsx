@@ -1,20 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
 import { FormInput } from "../../../reusable/FormInput";
-import { Button } from "../../../reusable/Button";
 import { DropDown } from "../../../reusable/dropdown/DropDown";
-import { departmentsArray, prioritiesArray } from "../../../../helpers/Helpers";
-import { addNewTicket } from "../../../../services/ticket.service";
 import io from "socket.io-client";
-// children for the Modal
+import { editTicket } from "../../../../services/ticket.service";
+import { Button } from "../../../reusable/Button";
+import { departmentsArray, prioritiesArray } from "../../../../helpers/Helpers";
 
 const API_ENDPOINT = "http://localhost:5000";
 
-const AddTicketForm = (props) => {
+const EditTicketForm = (props) => {
   const socket = io(API_ENDPOINT);
+  const { editModal, selectedTicket } = props;
 
-  const { addModal } = props;
   let departments = departmentsArray();
   let priorities = prioritiesArray();
+
   const [department, setDepartment] = useState("Select Department");
   const [priority, setPriority] = useState("Select Priority");
   const [ticket, setTicket] = useState({
@@ -30,29 +32,23 @@ const AddTicketForm = (props) => {
 
   const { fullname, email, subject, description } = ticket.data;
 
-  const onAddTickets = async (event) => {
-    event.preventDefault();
-    const { data } = ticket;
-    data.priority = priority;
-    data.department = department;
+  useEffect(() => {
+    if (selectedTicket) {
+      setTicket({
+        data: {
+          fullname: selectedTicket.fullname,
+          email: selectedTicket.email,
+          subject: selectedTicket.subject,
+          description: selectedTicket.description,
+          department: selectedTicket.department,
+          priority: selectedTicket.priority,
+        },
+      });
 
-    // add ticket
-    await addNewTicket(data);
-    socket.emit("refresh", {});
-    clearFormFields();
-  };
-
-  const onChange = (event) => {
-    const { name, value } = event.target;
-    const { data } = ticket;
-    // tickets
-    setTicket({
-      data: {
-        ...data,
-        [name]: value,
-      },
-    });
-  };
+      setDepartment(selectedTicket.department);
+      setPriority(selectedTicket.priority);
+    }
+  }, [selectedTicket]);
 
   const getDropDownValue = (item) => {
     if (item.key === "departments") {
@@ -62,25 +58,30 @@ const AddTicketForm = (props) => {
     }
   };
 
-  const clearFormFields = () => {
+  const onChange = (event) => {
+    const { name, value } = event.target;
+    const { data } = ticket;
     setTicket({
       data: {
-        fullname: "",
-        email: "",
-        subject: "",
-        description: "",
-        department: "",
-        priority: "",
+        ...data,
+        [name]: value,
       },
     });
-    setDepartment("Select Department");
-    setPriority("Select Priority");
+  };
+
+  const onEditTicket = async (event) => {
+    event.preventDefault();
+    const { data } = ticket;
+    data.priority = priority;
+    data.department = department;
+
+    await editTicket(selectedTicket._id, data);
+    socket.emit("refresh", {});
   };
 
   return (
     <>
-      <form onSubmit={onAddTickets}>
-        {/* name */}
+      <form onSubmit={onEditTicket}>
         <div className="form-group">
           <FormInput
             type="text"
@@ -93,7 +94,6 @@ const AddTicketForm = (props) => {
             onChange={onChange}
           />
         </div>
-        {/* email address */}
         <div className="form-group">
           <FormInput
             type="text"
@@ -106,7 +106,6 @@ const AddTicketForm = (props) => {
             onChange={onChange}
           />
         </div>
-        {/* Department */}
         <div className="form-group">
           <DropDown
             title={department}
@@ -115,7 +114,6 @@ const AddTicketForm = (props) => {
             getDropDownValue={getDropDownValue}
           />
         </div>
-        {/* Priority */}
         <div className="form-group">
           <DropDown
             title={priority}
@@ -124,7 +122,6 @@ const AddTicketForm = (props) => {
             getDropDownValue={getDropDownValue}
           />
         </div>
-        {/* subject */}
         <div className="form-group">
           <FormInput
             type="text"
@@ -137,7 +134,6 @@ const AddTicketForm = (props) => {
             onChange={onChange}
           />
         </div>
-        {/* Description */}
         <div className="form-group">
           <label>Description</label>
           <textarea
@@ -151,7 +147,7 @@ const AddTicketForm = (props) => {
         </div>
         <Button
           className="btn btn-primary"
-          label="ADD"
+          label="Edit"
           disabled={
             !fullname ||
             !email ||
@@ -165,11 +161,19 @@ const AddTicketForm = (props) => {
         <Button
           className="btn btn-danger"
           label="CANCEL"
-          handleClick={() => addModal(false)}
+          handleClick={() => editModal(false)}
         />
       </form>
     </>
   );
 };
 
-export default AddTicketForm;
+EditTicketForm.propTypes = {
+  selectedTicket: PropTypes.object,
+};
+
+const mapStateToProps = (state) => ({
+  seletectedTicket: state.tickets.seletectedTicket,
+});
+
+export default connect(mapStateToProps, {})(EditTicketForm);

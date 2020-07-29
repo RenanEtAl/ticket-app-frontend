@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import './Table.css'
+import "./Table.css";
+import io from "socket.io-client";
+import moment from "moment";
+import { selectedTicket } from "../../../../redux/actions/tickets";
+import { editModal } from "../../../../redux/actions/modal";
+import { deleteTicket } from "../../../../services/ticket.service";
 
 const TABLE_HEAD = [
   "ID",
@@ -14,9 +20,20 @@ const TABLE_HEAD = [
 ];
 
 const Table = (props) => {
-  const {} = props;
+  const { tickets, entries, selectedTicket, editModal, user } = props;
 
-  const openEditModal = (ticket) => {};
+  const [tableTickets, setTableTickets] = useState(tickets);
+
+  useEffect(() => {
+    // show 10 entries
+    const tableEntries = tickets.slice(0, parseInt(entries, 10));
+    setTableTickets(tableEntries);
+  }, [setTableTickets, tickets, entries]);
+
+  const openEditModal = (ticket) => {
+    editModal(true);
+    selectedTicket(ticket);
+  };
 
   const deleteUserTicket = (id) => {};
 
@@ -61,8 +78,10 @@ const Table = (props) => {
                   <span className="badge badge-secondary">{ticket.status}</span>
                 )}
               </td>
+              {/* show dates */}
               <td>{moment(ticket.created).format("DD/MM/YYYY")}</td>
               <td>{moment(ticket.dueDate).format("DD/MM/YYYY")}</td>
+              {/* actions */}
               <td
                 className={
                   user && user._id === ticket.user
@@ -145,6 +164,16 @@ const Table = (props) => {
   );
 };
 
-Table.propTypes = {};
+Table.propTypes = {
+  tickets: PropTypes.array.isRequired,
+  entries: PropTypes.any,
+  editModal: PropTypes.func.isRequired,
+  selectedTicket: PropTypes.func.isRequired
+};
 
-export default Table;
+const mapStateToProps = (state) => ({
+  tickets: state.tickets.tickets,
+  entries: state.tickets.entries,
+});
+
+export default connect(mapStateToProps, { editModal, selectedTicket })(Table);
