@@ -4,7 +4,7 @@ import "./DropDown.css";
 const DropDown = (props) => {
   const { title, list, label, getDropDownValue } = props;
 
-  const [listOpen, setListOpen] = useState(false);
+  let [listOpen, setListOpen] = useState(false);
 
   const toggleList = () => {
     listOpen = !listOpen;

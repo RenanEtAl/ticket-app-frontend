@@ -4,10 +4,11 @@ import { useHistory } from "react-router-dom";
 
 const Box = (props) => {
   const { cardValue, title, iconClass, cardValueClass, status, type } = props;
-  const history = useHistory();
 
+  const history = useHistory();
+  // navigate to filteredpage component
   const navigateToPage = (status, type) => {
-    //history
+    history.push(`/tickets/${status}/${type}`);
   };
   return (
     <>
