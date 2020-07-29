@@ -5,6 +5,8 @@ import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import ticketReducer from "./ticketReducer";
 import userReducer from "./userReducer";
+import modalReducer from "./modalReducer";
+import { LOGOUT } from "../types";
 
 const persistConfig = {
   key: "root",
@@ -13,11 +15,16 @@ const persistConfig = {
 const appReducers = combineReducers({
   auth: authReducer,
   user: userReducer,
-  ticket: ticketReducer,
+  tickets: ticketReducer,
   errors: errorReducer,
+  modal: modalReducer,
 });
 
 const rootReducers = (state, action) => {
+  // reset to initial state on user logout
+  if (action.type === LOGOUT) {
+    state = undefined;
+  }
   return appReducers(state, action);
 };
 

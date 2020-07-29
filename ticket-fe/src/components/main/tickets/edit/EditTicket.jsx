@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Modal } from "../../../reusable/modal/Modal";
 import { connect } from "react-redux";
 import { editModal } from "../../../../redux/actions/modal";
-import connect from "react-redux";
+
 import EditTicketForm from "./EditTicketForm";
 
 const EditTicket = (props) => {

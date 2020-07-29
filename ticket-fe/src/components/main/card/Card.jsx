@@ -5,7 +5,6 @@ import { connect } from "react-redux";
 import "./Card.css";
 import { Box } from "./Box";
 import { Button } from "../../reusable/Button";
-import { Modal } from "../../reusable/modal/Modal";
 import { addModal } from "../../../redux/actions/modal";
 
 const Card = (props) => {
@@ -14,7 +13,7 @@ const Card = (props) => {
   const findByPriority = (value) => {
     return _.filter(tickets, ["priority", value]).length;
   };
-  
+
   const findByStatus = (value) => {
     return _.filter(tickets, ["status", value]).length;
   };
@@ -25,11 +24,6 @@ const Card = (props) => {
         type="submit"
         label="Add Ticket"
         handleClick={() => addModal(true)}
-      />
-      <Modal
-        header="Add New Ticket"
-        visible={visible}
-        children="this is a test"
       />
       <div className="text-center mb-2">
         <div className="row">

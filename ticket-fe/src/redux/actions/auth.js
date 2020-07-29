@@ -44,7 +44,7 @@ export const loginUser = (userData) => async (dispatch) => {
   }
 };
 
-export const logoutUser = () => async (dispatch) => {
+export const logout = () => async (dispatch) => {
   try {
     dispatch({
       type: LOGOUT,

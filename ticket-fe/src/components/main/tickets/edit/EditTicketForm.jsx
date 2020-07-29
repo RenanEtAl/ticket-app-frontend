@@ -74,7 +74,8 @@ const EditTicketForm = (props) => {
     const { data } = ticket;
     data.priority = priority;
     data.department = department;
-
+    console.log(selectedTicket);
+    
     await editTicket(selectedTicket._id, data);
     socket.emit("refresh", {});
   };

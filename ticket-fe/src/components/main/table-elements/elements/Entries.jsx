@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { updateTableEntries } from "../../../../redux/actions/tickets";
 
 const Entries = (props) => {
-  const { entries, updateTableEntries, tickets, tableEntries } = props;
+  const { entries, updateTableEntries, tickets } = props;
   const [tableEntries, setTableEntries] = useState();
 
   useEffect(() => {

@@ -6,7 +6,9 @@ import io from "socket.io-client";
 import moment from "moment";
 import { selectedTicket } from "../../../../redux/actions/tickets";
 import { editModal } from "../../../../redux/actions/modal";
-import { deleteTicket } from "../../../../services/ticket.service";
+import { deleteTicket, closeTicket } from "../../../../services/ticket.service";
+
+const API_ENDPOINT = "http://localhost:5000";
 
 const TABLE_HEAD = [
   "ID",
@@ -20,6 +22,7 @@ const TABLE_HEAD = [
 ];
 
 const Table = (props) => {
+  const socket = io(API_ENDPOINT);
   const { tickets, entries, selectedTicket, editModal, user } = props;
 
   const [tableTickets, setTableTickets] = useState(tickets);
@@ -35,9 +38,15 @@ const Table = (props) => {
     selectedTicket(ticket);
   };
 
-  const deleteUserTicket = (id) => {};
+  const deleteUserTicket = (id) => {
+    deleteTicket(id);
+    socket.emit("refresh", {});
+  };
 
-  const markUserTicket = (id) => {};
+  const markUserTicket = (id) => {
+    closeTicket(id);
+    socket.emit("refresh", {});
+  };
 
   return (
     <div className="col-sm-12 table-responsive">
@@ -83,12 +92,14 @@ const Table = (props) => {
               <td>{moment(ticket.dueDate).format("DD/MM/YYYY")}</td>
               {/* actions */}
               <td
+                // enable button for user tickets
                 className={
                   user && user._id === ticket.user
                     ? "actions actions-bg"
                     : "actions"
                 }
               >
+                {/* user actions */}
                 {user && user._id === ticket.user ? (
                   <>
                     <a
@@ -98,6 +109,8 @@ const Table = (props) => {
                     >
                       <i className="fas fa-trash"></i>
                     </a>
+
+                    {/* disable action buttons */}
                     <a
                       href="#!"
                       className={
@@ -121,7 +134,8 @@ const Table = (props) => {
                       <i className="fas fa-pencil-alt"></i>
                     </a>
                   </>
-                ) : user && user.role === "Admin" ? (
+                ) : // admin actions
+                user && user.role === "Admin" ? (
                   <>
                     <a
                       href="#!"
@@ -144,6 +158,7 @@ const Table = (props) => {
                   </>
                 ) : (
                   <>
+                    {/* disable buttons */}
                     <a href="#!" className="btn btn-sm disabled">
                       <i className="fas fa-trash"></i>
                     </a>
@@ -168,12 +183,14 @@ Table.propTypes = {
   tickets: PropTypes.array.isRequired,
   entries: PropTypes.any,
   editModal: PropTypes.func.isRequired,
-  selectedTicket: PropTypes.func.isRequired
+  selectedTicket: PropTypes.func.isRequired,
+  user: PropTypes.object,
 };
 
 const mapStateToProps = (state) => ({
   tickets: state.tickets.tickets,
   entries: state.tickets.entries,
+  user: state.user,
 });
 
 export default connect(mapStateToProps, { editModal, selectedTicket })(Table);

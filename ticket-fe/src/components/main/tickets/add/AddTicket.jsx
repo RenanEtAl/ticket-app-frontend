@@ -28,6 +28,6 @@ const AddTicket = (props) => {
   );
 };
 const mapStateToProps = (state) => ({
-  add: state.modal.add,
+  addModal: state.modal.add,
 });
 export default connect(mapStateToProps, { addModal })(AddTicket);
