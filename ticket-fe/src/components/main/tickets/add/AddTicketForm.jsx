@@ -5,10 +5,10 @@ import { DropDown } from "../../../reusable/dropdown/DropDown";
 import { departmentsArray, prioritiesArray } from "../../../../helpers/Helpers";
 import { addNewTicket } from "../../../../services/ticket.service";
 import io from "socket.io-client";
+import { apiEndPoint } from "../../../../Config";
 // children for the Modal
 
-const API_ENDPOINT = "http://localhost:5000";
-
+const API_ENDPOINT = apiEndPoint()
 const AddTicketForm = (props) => {
   const socket = io(API_ENDPOINT);
 

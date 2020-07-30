@@ -1,12 +1,9 @@
 import axios from "axios";
+import { apiEndPoint, configHeader } from "../Config";
 
-const API_ENDPOINT = "http://localhost:5000";
+const API_ENDPOINT = apiEndPoint();
 
-const config = {
-  headers: {
-    "Content-Type": "application/json",
-  },
-};
+const config = configHeader();
 
 export const getAllTickets = async () => {
   const response = await axios.get(`${API_ENDPOINT}/tickets`, config);

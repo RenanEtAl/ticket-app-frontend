@@ -7,8 +7,9 @@ import io from "socket.io-client";
 import { editTicket } from "../../../../services/ticket.service";
 import { Button } from "../../../reusable/Button";
 import { departmentsArray, prioritiesArray } from "../../../../helpers/Helpers";
+import { apiEndPoint } from "../../../../Config";
 
-const API_ENDPOINT = "http://localhost:5000";
+const API_ENDPOINT = apiEndPoint();
 
 const EditTicketForm = (props) => {
   const socket = io(API_ENDPOINT);
@@ -75,7 +76,7 @@ const EditTicketForm = (props) => {
     data.priority = priority;
     data.department = department;
     console.log(selectedTicket);
-    
+
     await editTicket(selectedTicket._id, data);
     socket.emit("refresh", {});
   };

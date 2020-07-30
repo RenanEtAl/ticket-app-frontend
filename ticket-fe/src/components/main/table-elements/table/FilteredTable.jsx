@@ -8,8 +8,9 @@ import "./Table.css";
 import { deleteTicket, closeTicket } from "../../../../services/ticket.service";
 import io from "socket.io-client";
 import moment from "moment";
+import { apiEndPoint } from "../../../../Config";
 
-const API_ENDPOINT = "http://localhost:5000";
+const API_ENDPOINT = apiEndPoint();
 const TABLE_HEAD = [
   "ID",
   "Fullname",

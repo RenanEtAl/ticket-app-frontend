@@ -9,8 +9,9 @@ import { allTickets, updateTableEntries } from "../../../redux/actions/tickets";
 import { getUser } from "../../../redux/actions/user";
 import io from "socket.io-client";
 import EditTicket from "../tickets/edit/EditTicket";
+import { apiEndPoint } from "../../../Config";
 
-const API_ENDPOINT = "http://localhost:5000";
+const API_ENDPOINT = apiEndPoint();
 
 const Dashboard = (props) => {
   const socket = io(API_ENDPOINT);

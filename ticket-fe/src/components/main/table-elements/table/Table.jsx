@@ -7,8 +7,9 @@ import moment from "moment";
 import { selectedTicket } from "../../../../redux/actions/tickets";
 import { editModal } from "../../../../redux/actions/modal";
 import { deleteTicket, closeTicket } from "../../../../services/ticket.service";
+import { apiEndPoint } from "../../../../Config";
 
-const API_ENDPOINT = "http://localhost:5000";
+const API_ENDPOINT = apiEndPoint();
 
 const TABLE_HEAD = [
   "ID",
